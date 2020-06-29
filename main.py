@@ -16,14 +16,6 @@ import requests
 from bs4 import BeautifulSoup as bs
 import datetime
 
-
-
-
-import logging
- 
-logging.basicConfig(format = u'\n%(levelname)-8s [%(asctime)s] %(message)s ', level = logging.WARNING, filename = u'LogFileDmtr.log')
-
-
 api_id = """Your Id"""
 api_hash = """Your Hash"""
 client = TelegramClient('anon', api_id, api_hash)
@@ -127,7 +119,7 @@ async def handler(event):
     if event.is_private:
         if 'media=MessageMediaPhoto' in str(event):
             try:
-                await client.forward_messages('  """"Name of group"""  ',event.message)
+                await client.forward_messages('me',event.message)
             except Exception as e:
                 print(e)
         else:
@@ -148,7 +140,7 @@ async def handler(event):
         print(e)
 
 
-# Отправляю голосовое
+#Send voice
 @client.on(events.NewMessage(pattern='(^!gs$)|(^!voice$)|(^!voice$)|(^!g$)', outgoing=True))
 async def handler(event):
     try:
@@ -162,7 +154,7 @@ async def handler(event):
         print(e)
 
 
-# Помощь
+#Send help message
 @client.on(events.NewMessage(pattern='(^!help$)|(^!Comands$)|(^!comands$)|(^!Help$)', outgoing=True))
 async def handler(event):
     try:
@@ -172,14 +164,14 @@ async def handler(event):
         print(e)
 
 
-# Google голосовое
+# Google voice 
 @client.on(events.NewMessage(outgoing=True))
 async def handler(event):
     message_id = event.message.chat_id
     if '!а' in str(event.message.message):
         tetx = event.message.message
         await event.delete()
-        tts = gTTS(text=(tetx)[2:], lang='ru',slow = False)
+        tts = gTTS(text=(tetx)[2:], lang='en',slow = False)
         tts.save('sd.mp3')
         await client.send_file(message_id, 'sd.mp3', attributes=[types.DocumentAttributeAudio( duration=random.randint(3, 60) ,voice=True, waveform=utils.encode_waveform(bytes(((random.randint(3, 60), random.randint(3, 60), random.randint(1, 20), random.randint(1, 20), random.randint(1, 20), random.randint(1, 20), 31, 31)) * random.randint(1, 10))))])
     elif '!a' in str(event.message.message):
@@ -191,7 +183,7 @@ async def handler(event):
 
 
 
-# Погода
+#Weather
 @client.on(events.NewMessage(outgoing=True))
 async def handler(event):
     if '!weather' in str(event.message.message).lower():
@@ -274,9 +266,7 @@ async def update_bio():
         await client(UpdateProfileRequest(
             about=string
         ))
-        f = await client.send_file('Me','LogFileDmtr.log')
         await asyncio.sleep(600)
-        await f.delete()
 
     
 try:
