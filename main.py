@@ -82,7 +82,7 @@ def pogodazavtra():
     vremia = []
     nebo = []
     temperatyra = []
-    response = requests.get(f'  """Link https://sinoptik.ua/ and your city"""  {tomorrow}', headers=headers)
+    response = requests.get(f'  """Link https://sinoptik.ua/ and your city"""  /{tomorrow}', headers=headers)
     soup = bs(response.text, "html.parser")
     news = soup.find('table', class_='weatherDetails')
     time = news.find(class_ = 'gray time')
